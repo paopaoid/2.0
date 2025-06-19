@@ -1,0 +1,373 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column; /* Allow header/footer and main content to stack */
+    justify-content: flex-start; /* Align items to the start */
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #e6f7ff; /* Lighter background */
+    color: #333;
+    padding: 10px; /* Add some padding for smaller screens */
+    box-sizing: border-box;
+}
+
+.container {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 900px; /* Increased max-width */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    color: #0056b3; /* Darker blue for better contrast */
+    margin-bottom: 25px;
+    font-size: 2em; /* Larger title */
+}
+
+.game-area {
+    margin-bottom: 25px;
+    width: 100%;
+    display: flex; /* Use flex to center the game board if it's smaller than game-area */
+    flex-direction: column;
+    align-items: center; /* Center game board horizontally */
+}
+
+.score-level-info {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 1.2em; /* Slightly larger score info */
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+}
+
+.score-level-info p {
+    margin: 5px 10px;
+}
+
+#game-board {
+    display: grid;
+    /* grid-template-columns and rows will be set by JS */
+    gap: clamp(2px, 0.8vw, 4px); /* Slightly smaller gap for smaller cells */
+    justify-content: center; /* Horizontally center grid items if grid itself is wider */
+    align-content: center; /* Vertically center grid items */
+    margin: 15px auto; /* Center the board within its parent */
+    border: 2px solid #b0d8ff;
+    padding: clamp(4px, 1vw, 8px); /* Slightly smaller padding */
+    background-color: #d9efff;
+    /* width and height will be set by JS */
+    max-width: 95vw; /* Max width relative to viewport width */
+    max-height: 70vh; /* Max height relative to viewport height, to ensure visibility */
+    /* aspect-ratio: 1 / 1; /* Let JS handle dimensions for better control */
+    box-sizing: border-box; /* Ensure padding and border are included in width/height */
+}
+
+.game-cell {
+    /* width and height will be set by JS for responsiveness */
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(1.2em, 5vw, 2.2em); /* Adjusted font size for emoji icons */
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.3s ease, box-shadow 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #f0f8ff; /* Light base color for cells */
+    text-align: center;
+    line-height: normal; /* Reset line-height if it was set for block centering */
+}
+
+.game-cell:hover {
+    transform: scale(1.05);
+}
+
+.game-cell.selected {
+    transform: scale(1.15);
+    box-shadow: 0 0 8px 3px #ffcc00; /* Brighter gold */
+}
+
+.game-cell.hidden {
+    opacity: 0;
+    pointer-events: none;
+    background-color: transparent !important; /* Ensure hidden cells are truly invisible */
+    box-shadow: none;
+}
+
+/* Remove background color types, icons will be set by JS */
+.game-cell {
+    /* ... existing styles ... */
+    background-color: #f0f8ff; /* Light base color for cells */
+    /* Ensure text (emoji) is centered if that's the approach */
+    text-align: center;
+    line-height: normal; /* Reset line-height if it was set for block centering */
+}
+
+/* Optional: Add styles for specific animal icon types if needed, though JS will set content */
+/* Example: if using <img> or background-image with SVGs */
+/* .animal-type-0 { background-image: url('path/to/animal0.svg'); } */
+
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 25px; /* Larger padding */
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.05em;
+    margin-top: 15px;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+button:disabled {
+    background-color: #b0bec5; /* Lighter grey for disabled */
+    cursor: not-allowed;
+}
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1000; /* Higher z-index */
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.5); /* Slightly darker overlay */
+    padding-top: 5vh; /* Use vh for vertical positioning */
+    align-items: center; /* Vertically center modal content */
+    justify-content: center; /* Horizontally center modal content */
+}
+
+.modal-content {
+    background-color: #f8f9fa;
+    margin: auto; /* Centering */
+    padding: 25px;
+    border: 1px solid #ced4da;
+    width: 90%;
+    max-width: 650px; /* Slightly wider modal */
+    border-radius: 10px;
+    text-align: left;
+    position: relative;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+
+.modal-content h2 {
+    font-size: 1.8em; /* Larger modal titles */
+    color: #0056b3;
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    font-size: 1.2em; /* Larger font for科普content */
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+#info-text {
+    font-size: 1.3em; /* Specifically target info text */
+    line-height: 1.7;
+}
+
+.close-button {
+    color: #6c757d;
+    float: right;
+    font-size: 32px; /* Larger close button */
+    font-weight: bold;
+    position: absolute;
+    top: 15px;
+    right: 25px;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: #343a40;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#quiz-options button {
+    display: block;
+    width: calc(100% - 40px);
+    margin: 12px auto;
+    padding: 12px;
+    font-size: 1.1em;
+    background-color: #6c757d;
+}
+
+#quiz-options button:hover {
+    background-color: #5a6268;
+}
+
+#quiz-options button.correct {
+    background-color: #28a745; 
+}
+
+#quiz-options button.incorrect {
+    background-color: #dc3545; 
+}
+
+#quiz-feedback {
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 1.15em;
+}
+
+footer {
+    margin-top: 40px;
+    font-size: 0.95em;
+    color: #495057;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+}
+
+/* 花朵动画样式 */
+.flower-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.flower {
+    position: absolute;
+    top: -50px;
+    font-size: 24px;
+    animation: falling linear infinite;
+    opacity: 0.9;
+}
+
+@keyframes falling {
+    0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(calc(100vh - 50px)) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* 音乐按钮样式 */
+.music-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border: none;
+    padding: 0;
+}
+
+.music-button:hover {
+    background-color: #0056b3;
+    transform: scale(1.1);
+}
+
+/* 奖励信息样式 */
+.reward-message {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border-left: 4px solid #28a745;
+}
+
+.reward-message p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+/* 响应式调整 - 游戏板和单元格的调整由JavaScript处理 */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+    }
+    
+    .score-level-info {
+        font-size: 0.95em;
+        flex-direction: column;
+        margin-bottom: 10px;
+    }
+    
+    .score-level-info p {
+        margin: 3px 0;
+    }
+    
+    .modal-content {
+        padding: 15px;
+        width: 95%;
+    }
+    
+    .modal-content p, #info-text {
+        font-size: 1.05em;
+    }
+    
+    .modal-content h2 {
+        font-size: 1.4em;
+    }
+    
+    button {
+        padding: 8px 16px;
+        font-size: 0.95em;
+        margin-top: 10px;
+    }
+    
+    #quiz-options button {
+        font-size: 0.95em;
+        padding: 8px;
+        margin: 8px auto;
+    }
+    
+    .close-button {
+        font-size: 28px;
+        top: 10px;
+        right: 15px;
+    }
+    
+    .flower {
+        font-size: 20px;
+    }
+    
+    .music-button {
+        width: 36px;
+        height: 36px;
+        bottom: 15px;
+        right: 15px;
+        font-size: 18px;
+    }
+}
